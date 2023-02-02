@@ -1,28 +1,12 @@
-const processTransactions = transactions => {
-    
-    if (transactions === undefined) throw new Error("Undefined collection of transactions");
 
-    const [processedTransactions, transactionsCount] = [[], {}];
 
-    transactions.sort().forEach(item => transactionsCount[item] ? transactionsCount[item]++ : transactionsCount[item] = 1);
-
-    const sortedTransactionsCount = sortByAmount(transactionsCount);
-
-    Object.keys(sortedTransactionsCount).forEach((key, index) => processedTransactions[index] = `${key} ${sortedTransactionsCount[key]}`);
-
-    return processedTransactions;
-}; 
-
-const sortByAmount = transactionsCount => {
-
-    const sortedResults = {};
-
-    const sortedKeys = Object.keys(transactionsCount).sort((itemOne, itemTwo) => transactionsCount[itemTwo] - transactionsCount[itemOne]);
-
-    sortedKeys.forEach(objectKey =>  sortedResults[objectKey] = transactionsCount[objectKey] );
-
-    return sortedResults;
-}
-
+const processTransactions = transActions => {
+    if (!transActions) throw new Error("Undefined collection of transactions");
+    let txCount = {};
+    transActions.forEach(tx => txCount[tx] = (txCount[tx] || 0) + 1);
+    let sortedTx = Object.entries(txCount).sort(([a, countA], [b, countB]) => countB - countA || a.localeCompare(b));  
+    return sortedTx.map(([key, value]) => `${key} ${value}`);
+};
 
 module.exports = processTransactions;
+
